@@ -1,4 +1,4 @@
-import { App } from '../../App'
+import Home from '../../pages/Home'
 import Footer from '../Footer'
 import Header from '../Header'
 
@@ -6,7 +6,7 @@ const Layout: React.FC = () => {
   return (
     <>
       <Header />
-      <App />
+      <Home />
       <Footer />
     </>
   )
