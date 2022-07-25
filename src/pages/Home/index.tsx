@@ -9,16 +9,20 @@ import {
   VStack
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import api from '../../services/api'
 
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [searchlocal, setSearchLocal] = useState('')
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (searchlocal === '') {
       alert('nao deixe o campo em branco')
     }
     console.log(searchlocal)
+    const response = await api.get(
+      '/api/v1/anl/synoptic/locale/:BR?token=1e4c111c74cbbfef85a7c61edc644ded'
+    )
   }
 
   return (
@@ -37,7 +41,7 @@ const Home: React.FC = () => {
               pr={250}
               size="lg"
               borderRadius={20}
-              color="teal"
+              color="black"
               placeholder="Digite o local"
               _placeholder={{ color: 'gray' }}
               backgroundColor="#ffffff"
