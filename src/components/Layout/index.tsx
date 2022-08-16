@@ -7,7 +7,6 @@ const Layout: React.FC = () => {
   return (
     <>
       <Header />
-
       <Home />
       <Footer />
     </>
