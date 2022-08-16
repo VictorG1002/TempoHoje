@@ -20,13 +20,12 @@ const Home: React.FC = () => {
       alert('nao deixe o campo em branco')
     }
     console.log(searchlocal)
-    const response = await api.get(
-      '/api/v1/anl/synoptic/locale/:BR?token=1e4c111c74cbbfef85a7c61edc644ded'
-    )
+    const response = await api.get(``)
+    console.log(response.data)
   }
 
   return (
-    <Box bg={'gray.100'} w="full" h="full" p={100}>
+    <Box bg={'gray.100'} w="full" h="full" p={100} minH="100">
       <Center mt={8}>
         <VStack>
           <Heading mb={5} color={'gray.700'}>
