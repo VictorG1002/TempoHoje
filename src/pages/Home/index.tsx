@@ -8,20 +8,15 @@ import {
   Input,
   VStack
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import api from '../../services/api'
 
 const Home: React.FC = () => {
-  const [loading, setLoading] = useState(false)
-  const [searchlocal, setSearchLocal] = useState('')
+  const getInput = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = async () => {
-    if (searchlocal === '') {
-      alert('nao deixe o campo em branco')
-    }
-    console.log(searchlocal)
+  const searchCityInApi = async () => {
+    const city = getInput.current?.value
     const response = await api.get(``)
-    console.log(response.data)
   }
 
   return (
@@ -29,24 +24,22 @@ const Home: React.FC = () => {
       <Center mt={8}>
         <VStack>
           <Heading mb={5} color={'gray.700'}>
-            Digite o local que voce deseja ver o clima
+            Digite a cidade que voce deseja ver o clima
           </Heading>
           <HStack>
             <Input
-              onChange={e => {
-                setSearchLocal(e.target.value)
-              }}
-              value={searchlocal}
+              ref={getInput}
               pr={250}
               size="lg"
               borderRadius={20}
               color="black"
-              placeholder="Digite o local"
+              placeholder="Digite o nome do local"
               _placeholder={{ color: 'gray' }}
               backgroundColor="#ffffff"
-            ></Input>
+            />
+
             <Button
-              onClick={handleSubmit}
+              onClick={searchCityInApi}
               size="md"
               bg={'blue.400'}
               color="gray.700"
