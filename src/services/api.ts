@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://apiadvisor.climatempo.com.br',
+  baseURL: 'http://dataservice.accuweather.com',
   headers: {
-    'Access-Control-Allow-Origin': '1e4c111c74cbbfef85a7c61edc644ded'
+    'Access-Control-Allow-Origin': '4SIFhGz1AG5RJMIJRLmPBC5sO0onkV6O'
   }
 })
 
 api.defaults.headers.common['Authorization'] =
-  '1e4c111c74cbbfef85a7c61edc644ded'
+  '4SIFhGz1AG5RJMIJRLmPBC5sO0onkV6O'
 
 export default api
