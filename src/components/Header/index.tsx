@@ -4,7 +4,7 @@ const Header: React.FC = () => {
   return (
     <Box bg={'blue.400'} p={10}>
       <Heading size="2xl" color={'white'}>
-        TempoHoje
+        🌧 TempoHoje
       </Heading>
     </Box>
   )
