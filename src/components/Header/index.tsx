@@ -1,4 +1,4 @@
-import { Box, Divider, Heading } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 
 const Header: React.FC = () => {
   return (

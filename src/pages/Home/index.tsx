@@ -11,12 +11,54 @@ import {
 import { useRef, useState } from 'react'
 import api from '../../services/api'
 
+const key = '4SIFhGz1AG5RJMIJRLmPBC5sO0onkV6O'
+
+interface Icity {
+  Key: string
+  Type: string
+  Rank: number
+  LocalizedName: string
+  EnglishName: string
+  PrimaryPostalCode: string
+  Region: {
+    ID: string
+    LocalizedName: string
+    EnglishName: string
+  }
+  Country: {
+    ID: string
+    LocalizedName: string
+    EnglishName: string
+  }
+  AdministrativeArea: {
+    ID: string
+    LocalizedName: string
+    EnglishName: string
+    Level: number
+    LocalizedType: string
+    EnglishType: string
+    CountryID: string
+  }
+  TimeZone: {
+    Code: string
+    Name: string
+    GmtOffset: number
+    IsDaylightSaving: boolean
+    NextOffsetChange: null
+  }
+}
+
 const Home: React.FC = () => {
   const getInput = useRef<HTMLInputElement>(null)
+  const [city, setCity] = useState()
 
   const searchCityInApi = async () => {
-    const city = getInput.current?.value
-    const response = await api.get(``)
+    const inputValue = getInput.current?.value
+    const response = await api.get(
+      `/locations/v1/cities/search?apikey=${key}&q=${inputValue}`
+    )
+    setCity(response.data[0])
+    console.log(response.data)
   }
 
   return (
