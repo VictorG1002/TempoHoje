@@ -8,10 +8,9 @@ import {
   Input,
   VStack
 } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import WeatherCard from '../../components/WeatherCard'
 import api from '../../services/api'
-
-const key = '4SIFhGz1AG5RJMIJRLmPBC5sO0onkV6O'
 
 interface Icity {
   Key: string
@@ -48,16 +47,81 @@ interface Icity {
   }
 }
 
+interface Iweather {
+  Headline: {
+    EffectiveDate: string
+    EffectiveEpochDate: number
+    Severity: number
+    Text: string
+    Category: string
+    EndDate: string
+    EndEpochDate: number
+    MobileLink: string
+    Link: string
+  }
+  DailyForecasts: [
+    {
+      Date: string
+      EpochDate: number
+      Temperature: {
+        Minimum: {
+          Value: number
+          Unit: string
+          UnitType: number
+        }
+        Maximum: {
+          Value: number
+          Unit: string
+          UnitType: number
+        }
+        Day: {
+          Icon: number
+          IconPhrase: string
+          HasPrecipitation: boolean
+          PrecipitationType: string
+          PrecipitationIntensity: string
+        }
+        Night: {
+          Icon: number
+          IconPhrase: string
+          HasPrecipitation: boolean
+          PrecipitationType: string
+          PrecipitationIntensity: string
+        }
+      }
+    }
+  ]
+}
+
+const key = 'GCJ8xDOyOrzb8aKbB888Uq0N1yyBy0y1'
+
 const Home: React.FC = () => {
   const getInput = useRef<HTMLInputElement>(null)
-  const [city, setCity] = useState()
+  const [city, setCity] = useState<Icity | null>(null)
+  const [weather, setWeather] = useState<Iweather | null>(null)
+  const [showComponent, setShowComponent] = useState(false)
 
   const searchCityInApi = async () => {
     const inputValue = getInput.current?.value
+    const response = await api
+      .get(`/locations/v1/cities/search?apikey=${key}&q=${inputValue}`)
+      .then(res => {
+        setCity(res.data[0])
+        setShowComponent(true)
+      })
+      .catch(() => {
+        setShowComponent(false)
+        setCity(null)
+      })
+
+    searchWeatherInApi()
+  }
+
+  const searchWeatherInApi = async () => {
     const response = await api.get(
-      `/locations/v1/cities/search?apikey=${key}&q=${inputValue}`
+      `/forecasts/v1/daily/1day/${city?.Key}?apikey=${key}&language=pt-br`
     )
-    setCity(response.data[0])
+    setWeather(response.data)
     console.log(response.data)
   }
 
@@ -90,6 +154,7 @@ const Home: React.FC = () => {
               <Search2Icon color={'white'} />
             </Button>
           </HStack>
+          {showComponent ? <WeatherCard /> : <Box></Box>}
         </VStack>
       </Center>
     </Box>
