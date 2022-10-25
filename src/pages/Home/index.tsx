@@ -8,11 +8,11 @@ import {
   Input,
   VStack
 } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import WeatherCard from '../../components/WeatherCard'
 import api from '../../services/api'
 
-interface Icity {
+export interface Icity {
   Key: string
   Type: string
   Rank: number
@@ -47,7 +47,7 @@ interface Icity {
   }
 }
 
-interface Iweather {
+export interface Iweather {
   Headline: {
     EffectiveDate: string
     EffectiveEpochDate: number
@@ -74,20 +74,20 @@ interface Iweather {
           Unit: string
           UnitType: number
         }
-        Day: {
-          Icon: number
-          IconPhrase: string
-          HasPrecipitation: boolean
-          PrecipitationType: string
-          PrecipitationIntensity: string
-        }
-        Night: {
-          Icon: number
-          IconPhrase: string
-          HasPrecipitation: boolean
-          PrecipitationType: string
-          PrecipitationIntensity: string
-        }
+      }
+      Day: {
+        Icon: number
+        IconPhrase: string
+        HasPrecipitation: boolean
+        PrecipitationType: string
+        PrecipitationIntensity: string
+      }
+      Night: {
+        Icon: number
+        IconPhrase: string
+        HasPrecipitation: boolean
+        PrecipitationType: string
+        PrecipitationIntensity: string
       }
     }
   ]
@@ -107,33 +107,71 @@ const Home: React.FC = () => {
       .get(`/locations/v1/cities/search?apikey=${key}&q=${inputValue}`)
       .then(res => {
         setCity(res.data[0])
-        setShowComponent(true)
       })
       .catch(() => {
         setShowComponent(false)
         setCity(null)
       })
-
-    searchWeatherInApi()
   }
 
   const searchWeatherInApi = async () => {
     const response = await api.get(
-      `/forecasts/v1/daily/1day/${city?.Key}?apikey=${key}&language=pt-br`
+      `/forecasts/v1/daily/1day/${city?.Key}?apikey=${key}&language=pt-br&details=false&metric=true`
     )
     setWeather(response.data)
-    console.log(response.data)
+    setShowComponent(true)
   }
 
+  const validateTime = () => {
+    const now = new Date().getHours()
+    const nowMinutes = new Date().getMinutes()
+    if (now < 18) {
+      const dayIcon = weather?.DailyForecasts[0].Day.Icon
+      let img = `https://developer.accuweather.com/sites/default/files/${String(
+        dayIcon
+      ).padStart(2, '0')}-s.png`
+
+      return (
+        <WeatherCard
+          img={img}
+          weather={weather}
+          city={city}
+          now={now}
+          minutes={nowMinutes}
+        />
+      )
+    } else {
+      const nightIcon = weather?.DailyForecasts[0].Night.Icon
+      let img = `https://developer.accuweather.com/sites/default/files/${nightIcon}-s.png`
+      return (
+        <WeatherCard
+          img={img}
+          weather={weather}
+          city={city}
+          now={now}
+          minutes={nowMinutes}
+        />
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (city != null) {
+      searchWeatherInApi()
+    }
+  }, [city])
+
   return (
-    <Box bg={'gray.100'} w="full" h="full" p={100} minH="100">
+    <Box bg={'gray.100'} w="full" h="100vh" p={100} minH="100">
       <Center mt={8}>
         <VStack>
           <Heading mb={5} color={'gray.700'}>
             Digite a cidade que voce deseja ver o clima
           </Heading>
-          <HStack>
+
+          <HStack display="flex" justifyContent="center" alignItems="center">
             <Input
+              shadow="lg"
               ref={getInput}
               pr={250}
               size="lg"
@@ -150,11 +188,12 @@ const Home: React.FC = () => {
               bg={'blue.400'}
               color="gray.700"
               borderRadius={15}
+              shadow="md"
             >
               <Search2Icon color={'white'} />
             </Button>
           </HStack>
-          {showComponent ? <WeatherCard /> : <Box></Box>}
+          <Box mt={1}>{showComponent ? validateTime() : <Box></Box>}</Box>
         </VStack>
       </Center>
     </Box>
