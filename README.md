@@ -11,7 +11,7 @@
  
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/VictorG1002/TempoHoje.svg">
-  <a href="https://github.com/lukemorales/react-rocketshoes/commits/master">
+  <a href="https://github.com/VictorG1002/TempoHoje/commits/master">
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/VictorG1002/TempoHoje.svg">
   </a>
 
