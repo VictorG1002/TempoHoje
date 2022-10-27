@@ -10,6 +10,10 @@ interface Iprops {
   minutes: number
 }
 
+const getAverageTemperature = (a: number, b: number) => {
+  return Math.floor((a + b) / 2)
+}
+
 const WeatherCard: React.FC<Iprops> = ({
   img,
   weather,
@@ -17,6 +21,13 @@ const WeatherCard: React.FC<Iprops> = ({
   now,
   minutes
 }) => {
+  const min = Math.floor(
+    weather?.DailyForecasts[0].Temperature.Minimum.Value || 0
+  )
+  const max = Math.floor(
+    weather?.DailyForecasts[0].Temperature.Maximum.Value || 0
+  )
+
   return (
     <>
       <Box
@@ -28,12 +39,23 @@ const WeatherCard: React.FC<Iprops> = ({
         borderRadius={22}
         shadow="md"
       >
+        <Box
+          display={'flex'}
+          justifyContent="flex-start"
+          flexDirection={'column'}
+          mt={2}
+          ml={4}
+        >
+          <Text as="b" color={'blue.600'}>
+            {city?.LocalizedName}
+          </Text>
+          <Text as="b" fontSize={'sm'} color={'blue.600'}>
+            {now}:{String(minutes).padStart(2, '0')}
+          </Text>
+        </Box>
         <Center mt={8}>
+          <Text>{getAverageTemperature(min, max)}</Text>
           <VStack>
-            <Text>{city?.LocalizedName}</Text>
-            <Text>
-              {now}:{String(minutes).padStart(2, '0')}
-            </Text>
             <Box
               display={'flex'}
               justifyContent="center"
@@ -45,6 +67,8 @@ const WeatherCard: React.FC<Iprops> = ({
             >
               <Image display={'flex'} w={110} h={70} src={img} />
             </Box>
+            <Text>{min}</Text>
+            <Text>{max}</Text>
           </VStack>
         </Center>
       </Box>
