@@ -138,6 +138,7 @@ const Home: React.FC = () => {
           city={city}
           now={now}
           minutes={nowMinutes}
+          text={weather?.DailyForecasts[0].Day.IconPhrase || ''}
         />
       )
     } else {
@@ -150,6 +151,7 @@ const Home: React.FC = () => {
           city={city}
           now={now}
           minutes={nowMinutes}
+          text={weather?.DailyForecasts[0].Night.IconPhrase || ''}
         />
       )
     }

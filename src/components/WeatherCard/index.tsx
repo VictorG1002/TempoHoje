@@ -8,6 +8,7 @@ interface Iprops {
   city: Icity | null
   now: number
   minutes: number
+  text: string
 }
 
 const getAverageTemperature = (a: number, b: number) => {
@@ -19,7 +20,8 @@ const WeatherCard: React.FC<Iprops> = ({
   weather,
   city,
   now,
-  minutes
+  minutes,
+  text
 }) => {
   const min = Math.floor(
     weather?.DailyForecasts[0].Temperature.Minimum.Value || 0
@@ -39,25 +41,27 @@ const WeatherCard: React.FC<Iprops> = ({
         borderRadius={22}
         shadow="md"
       >
-        <Box
-          display={'flex'}
-          justifyContent="flex-start"
-          flexDirection={'column'}
-          mt={2}
-          ml={4}
-        >
-          <Text as="b" color={'blue.600'}>
-            {city?.LocalizedName}
-          </Text>
-          <Text as="b" fontSize={'sm'} color={'blue.600'}>
-            {now}:{String(minutes).padStart(2, '0')}
-          </Text>
+        <Box display={'flex'} mt={2} ml={5} alignItems={'normal'}>
+          <Box display={'flex'} flexDirection={'column'}>
+            <Text as="b" color={'blue.600'}>
+              {city?.LocalizedName}
+            </Text>
+            <Text as="b" fontSize={'sm'} color={'blue.600'}>
+              {now}:{String(minutes).padStart(2, '0')}
+            </Text>
+          </Box>
+          <Box display={'flex'} ml={260} alignItems={'flex-start'}>
+            <Text as="b" color={'blue.600'} fontSize={'3xl'}>
+              {getAverageTemperature(min, max)}°
+            </Text>
+          </Box>
         </Box>
-        <Center mt={8}>
-          <Text>{getAverageTemperature(min, max)}</Text>
+
+        <Center mt={7}>
           <VStack>
             <Box
               display={'flex'}
+              flexDirection={'column'}
               justifyContent="center"
               alignItems="center"
               w={150}
@@ -66,10 +70,17 @@ const WeatherCard: React.FC<Iprops> = ({
               shadow="lg"
             >
               <Image display={'flex'} w={110} h={70} src={img} />
+              <Box display={'flex'} flexDirection={'row'} mt={1} gap={6}>
+                <Text color={'blue.400'}>{max}°</Text>
+                <Text color={'blue.200'}>{min}°</Text>
+              </Box>
             </Box>
-            <Text>{min}</Text>
-            <Text>{max}</Text>
           </VStack>
+        </Center>
+        <Center>
+          <Text mt={5} as="i" color={'gray.500'}>
+            {text}
+          </Text>
         </Center>
       </Box>
     </>
