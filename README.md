@@ -54,7 +54,7 @@ $ npm start
 
 
 
-Made with ♥ by Victor Oliveira ➡️ [Get in touch!](https://www.linkedin.com/in/lukemorales/)
+Made with ♥ by Victor Oliveira ➡️ [Get in touch!](https://www.linkedin.com/in/victoroliveira-/)
 
 [nodejs]: https://nodejs.org/
 [yarn]: https://yarnpkg.com/
